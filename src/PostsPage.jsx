@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { PostsIndex } from "./PostsIndex";
+import { PostsNew } from "./PostsNew";
 
 export function PostsPage() {
   const [posts, setPosts] = useState([]);
@@ -13,9 +14,18 @@ export function PostsPage() {
     });
   };
 
+  const handleCreate = (params, successCallback) => {
+    console.log("handleCreate", params);
+    axios.post("http://localhost:3000/posts.json", params).then((response) => {
+      setPosts([...posts, response.data]);
+      successCallback();
+    });
+  };
+
   useEffect(handleIndex, []);
   return (
     <main>
+      <PostsNew onCreate={handleCreate} />
       <PostsIndex posts={posts} />
     </main>
   );
